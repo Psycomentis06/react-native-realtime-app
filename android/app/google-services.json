@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "885162217423",
+    "firebase_url": "https://chat-react-native-270b7-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "chat-react-native-270b7",
+    "storage_bucket": "chat-react-native-270b7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:885162217423:android:520b707d6abb7dae638cba",
+        "android_client_info": {
+          "package_name": "com.dsi3.reactnativechat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "885162217423-v2tqr8tm5hhvmgfmr4m9kimenfbnos3m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwpptWtboXMJ05dWDDk4vysNXi3mLYlIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "885162217423-v2tqr8tm5hhvmgfmr4m9kimenfbnos3m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
