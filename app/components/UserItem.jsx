@@ -47,10 +47,7 @@ export default function UserItem({user, userId, navigation}) {
               ? {
                   uri: user.avatar,
                 }
-              : {
-                  uri:
-                    'https://images.unsplash.com/photo-1559838122-814d252e3f33?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=376&q=80',
-                }
+              : require('../assets/default_avatar_gif.gif')
           }
         />
         <View>

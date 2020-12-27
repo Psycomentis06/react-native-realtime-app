@@ -3,7 +3,7 @@ import {Text, View} from 'react-native';
 export default function ChatRoom({route, navigation}) {
   var userId = '';
   if (route) {
-    userId = route.params.userId;
+    userId = route.params?.userId;
   }
   return (
     <View>
