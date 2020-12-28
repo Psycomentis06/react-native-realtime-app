@@ -1,14 +1,216 @@
-import React from 'react';
-import {Text, View} from 'react-native';
+import React, {useState, useEffect, useCallback} from 'react';
+import {Text, View, StyleSheet, Pressable} from 'react-native';
+import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
+import {COLORS} from './__styleVars';
+import {FlatList, TextInput} from 'react-native-gesture-handler';
 export default function ChatRoom({route, navigation}) {
-  var userId = '';
-  if (route) {
-    userId = route.params?.userId;
+  const {userId, username} = route.params;
+  // states
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [error, setError] = useState('');
+  const [chat, setChat] = useState([]);
+  const [message, setMessage] = useState('');
+  const [user, setUser] = useState({});
+  const [roomId, setRoomId] = useState('');
+  const [newChat, setNewChat] = useState(false);
+  // style
+  const styles = StyleSheet.create({
+    notLoggedcontainer: {
+      flex: 1,
+      backgroundColor: COLORS.grey,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    notLogged: {
+      fontSize: 35,
+      textAlign: 'center',
+      lineHeight: 100,
+      padding: 10,
+      color: COLORS.danger,
+      fontFamily: 'sans-serif-condensed',
+    },
+    container: {},
+    chatContainer: {
+      backgroundColor: COLORS.grey,
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+    },
+    input: {
+      width: '80%',
+    },
+    sendBtn: {
+      borderRadius: 5,
+      backgroundColor: COLORS.primary,
+      padding: 10,
+    },
+    bubble: {
+      width: '70%',
+      backgroundColor: COLORS.warning,
+      flexShrink: 1,
+      marginTop: 10,
+      fontSize: 16,
+      padding: 10,
+      borderRadius: 10,
+      color: COLORS.white,
+      marginLeft: 'auto',
+    },
+    bubbleMine: {
+      width: '70%',
+      backgroundColor: COLORS.primary,
+      flexShrink: 1,
+      marginTop: 10,
+      fontSize: 16,
+      padding: 10,
+      borderRadius: 10,
+      color: COLORS.white,
+    },
+    conversation: {
+      height: !newChat ? '100%' : '80%',
+      padding: 5,
+      display: 'flex',
+      justifyContent: 'flex-end',
+    },
+    actionContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      borderTopColor: COLORS.black,
+      borderTopWidth: 1,
+      alignItems: 'center',
+    },
+    title: {
+      fontSize: 25,
+      textAlign: 'center',
+      color: COLORS.primary,
+      fontWeight: 'normal',
+    },
+  });
+  // validate if user logged in
+  useEffect(() => {
+    navigation.addListener('focus', () => {
+      auth().onAuthStateChanged((loggedUser) => {
+        if (loggedUser) {
+          navigation.setOptions({title: username});
+          setUser(loggedUser);
+          var localRoomId = '';
+          if (loggedUser.uid > userId) {
+            setRoomId(loggedUser.uid + userId);
+            localRoomId = loggedUser.uid + userId;
+          } else {
+            setRoomId(userId + loggedUser.uid);
+            localRoomId = userId + loggedUser.uid;
+          }
+          setLoggedIn(true);
+          if (localRoomId.length > 0) {
+            database()
+              .ref('rooms')
+              .child(localRoomId)
+              .on('value', (snapshot) => {
+                if (!snapshot.exists()) {
+                  setNewChat(true);
+                } else {
+                  let chatArray = [];
+                  snapshot.forEach((message) => {
+                    const messageEl = {
+                      id: message.key,
+                      message: message.val(),
+                    };
+                    chatArray.push(messageEl);
+                  });
+                  setChat(chatArray);
+                }
+              });
+          }
+        } else {
+          setLoggedIn(false);
+        }
+      });
+    });
+  }, [navigation]);
+  const addMessage = (message, type) => {
+    console.log(roomId);
+    if (message.length > 0) {
+      database()
+        .ref('rooms')
+        .child(roomId)
+        .push(
+          {
+            message: message,
+            sender: user.uid,
+            createdAt: database.ServerValue.TIMESTAMP,
+            msgType: type,
+          },
+          (err) => {
+            if (err) {
+              setError(err.message);
+            } else {
+              setMessage('');
+            }
+          },
+        );
+    } else {
+      setError('Message empty');
+    }
+  };
+  if (loggedIn === false) {
+    return (
+      <View style={styles.notLoggedcontainer}>
+        <Text style={styles.notLogged}>
+          {' '}
+          {'You are not logged in please go back to login '}{' '}
+        </Text>
+      </View>
+    );
   }
   return (
-    <View>
-      <Text>ChatRoom</Text>
-      <Text> User Id: {userId} </Text>
+    <View style={styles.container}>
+      <View style={styles.chatContainer}>
+        {newChat && <Text style={styles.title}> Say hello to {username} </Text>}
+        <FlatList
+          contentContainerStyle={styles.conversation}
+          data={chat}
+          renderItem={(message) => (
+            <View
+              style={
+                message.item.message.sender === user.uid
+                  ? styles.bubbleMine
+                  : styles.bubble
+              }>
+              <Text style={{flexShrink: 1, fontSize: 16, color: COLORS.white}}>
+                {message.item.message.message}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 10,
+                  textAlign: 'center',
+                  color: COLORS.white,
+                  opacity: 0.7,
+                }}>
+                {new Date(message.item.message.createdAt).toLocaleString()}
+              </Text>
+            </View>
+          )}
+          keyExtractor={(message) => message.id}
+        />
+        {error.length > 0 && setTimeout(() => setError(''), 5000) && (
+          <Text style={{color: COLORS.danger}}> {error} </Text>
+        )}
+        <View style={styles.actionContainer}>
+          <TextInput
+            placeholderTextColor={COLORS.black}
+            placeholder="Send message"
+            style={styles.input}
+            value={message}
+            onChangeText={(text) => setMessage(text)}
+          />
+          <Pressable
+            style={styles.sendBtn}
+            onPress={() => addMessage(message, 'text')}>
+            <Text style={{color: COLORS.white}}> Send </Text>
+          </Pressable>
+        </View>
+      </View>
     </View>
   );
 }
