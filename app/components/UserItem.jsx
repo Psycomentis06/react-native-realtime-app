@@ -39,7 +39,10 @@ export default function UserItem({user, userId, navigation}) {
     <Pressable
       onPress={() => {
         userId !== undefined
-          ? navigation.navigate('Chat', {userId: userId})
+          ? navigation.navigate('Chat', {
+              userId: userId,
+              username: user.username,
+            })
           : Alert.alert('Error', 'User object is missing');
       }}>
       <View style={styles.container}>
