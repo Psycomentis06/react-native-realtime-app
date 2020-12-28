@@ -59,7 +59,9 @@ export default function UserItem({user, userId, navigation}) {
           </Text>
           <Text style={styles.date}>
             {' '}
-            {user !== undefined ? user.createdAt : 'not mentioned'}{' '}
+            {user !== undefined
+              ? new Date(user.createdAt).toLocaleString()
+              : 'not mentioned'}{' '}
           </Text>
         </View>
       </View>
