@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Pressable, Alert} from 'react-native';
+import {View, Text, StyleSheet, Pressable, FlatList} from 'react-native';
 import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
 import {COLORS} from './__styleVars';
 import UserItem from './UserItem';
 import Login from './Login';
@@ -10,8 +11,10 @@ export default function Home({navigation}) {
       color: COLORS.danger,
     },
   });
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [error, setError] = useState('');
+  const [loggedIn, setLoggedIn] = useState(false); // user login state
+  const [error, setError] = useState(''); // request errors
+  const [loading, setLoading] = useState(false); // fetch data indicator
+  const [users, setUsers] = useState([]); // available users
   useEffect(() => {
     auth().onAuthStateChanged(function (user) {
       if (!user) {
@@ -20,10 +23,25 @@ export default function Home({navigation}) {
         setLoggedIn(false);
       } else {
         setLoggedIn(true);
+        getRooms();
       }
     });
   }, []);
-  const getRooms = () => {};
+  const getRooms = () => {
+    let usersArray = [];
+    database()
+      .ref('/users')
+      .on('value', (snapshot) => {
+        snapshot.forEach((user) => {
+          const userEl = {
+            id: user.key,
+            user: user.val(),
+          };
+          usersArray.push(userEl);
+        });
+        setUsers(usersArray);
+      });
+  };
   if (loggedIn === false) {
     return <Login navigation={navigation} />;
   }
@@ -45,7 +63,17 @@ export default function Home({navigation}) {
       <Pressable onPress={() => navigation.navigate('Login')}>
         <Text> Login </Text>
       </Pressable>
-      <UserItem navigation={navigation} userId="123" />
+      <FlatList
+        data={users}
+        keyExtractor={(user) => user.id}
+        renderItem={(user) => (
+          <UserItem
+            navigation={navigation}
+            userId={user.item.id}
+            user={user.item.user}
+          />
+        )}
+      />
     </View>
   );
 }
