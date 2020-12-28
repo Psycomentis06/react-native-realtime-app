@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Pressable,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import {COLORS} from './__styleVars';
@@ -13,16 +14,16 @@ export default function Login({navigation}) {
   const Styles = StyleSheet.create({
     input: {
       borderRadius: 30,
-      borderColor: '#3742fa',
+      borderColor: COLORS.primary,
       borderWidth: 2,
       marginTop: 10,
-      color: 'white',
+      color: COLORS.black,
       width: 250,
     },
     loginText: {
       textAlign: 'center',
       fontSize: 24,
-      color: 'whitesmoke',
+      color: COLORS.black,
       fontWeight: 'bold',
     },
     loginBtn: {
@@ -46,20 +47,19 @@ export default function Login({navigation}) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const login = (email, password) => {
-    setLoading(true);
-    auth()
-      .signInWithEmailAndPassword(email, password)
-      .then((user) => {
-        navigation.navigate('Home');
-      })
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
+    if (email.length > 0 || password.length > 0) {
+      setLoading(true);
+      auth()
+        .signInWithEmailAndPassword(email, password)
+        .catch((err) => setError(err.message))
+        .finally(() => setLoading(false));
+    } else {
+      setError('Email and Password are required to login');
+    }
   };
-
   return (
     <View
       style={{
@@ -70,10 +70,27 @@ export default function Login({navigation}) {
         alignItems: 'center',
         backgroundColor: '#2f3542',
       }}>
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: COLORS.white,
+          padding: 10,
+          borderRadius: 10,
+        }}>
         <Text style={Styles.loginText}>Login</Text>
+        <Text style={{color: COLORS.black}}>
+          {' '}
+          If you don't have an account{' '}
+          <Text
+            style={{color: COLORS.primary, opacity: 0.9}}
+            onPress={() => navigation.navigate('Signup')}>
+            {' '}
+            register{' '}
+          </Text>{' '}
+        </Text>
         <TextInput
-          placeholderTextColor="white"
+          placeholderTextColor={COLORS.black}
           placeholder="Your Email"
           style={Styles.input}
           onChangeText={(text) => setEmail(text)}
@@ -81,14 +98,14 @@ export default function Login({navigation}) {
         />
         <TextInput
           placeholder="Your password"
-          placeholderTextColor="white"
+          placeholderTextColor={COLORS.black}
           style={Styles.input}
           secureTextEntry={true}
           onChangeText={(text) => setPassword(text)}
           value={password}
         />
-        {error.length > 0 && setTimeout(() => setError(''), 10000) && (
-          <Text> {error} </Text>
+        {error.length > 0 && setTimeout(() => setError(''), 6000) && (
+          <Text style={{color: COLORS.danger, width: 250}}> {error} </Text>
         )}
         <Pressable onPress={() => login(email, password)}>
           <Text style={Styles.loginBtn}>

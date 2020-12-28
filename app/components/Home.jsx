@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, Pressable, Alert} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import {COLORS} from './__styleVars';
 import UserItem from './UserItem';
+import Login from './Login';
 export default function Home({navigation}) {
   const styles = StyleSheet.create({
     error: {
@@ -17,11 +18,17 @@ export default function Home({navigation}) {
         // User not signed in.
         //navigation.navigate('Login')
         setLoggedIn(false);
+        navigation.setOptions({title: 'Login'});
       } else {
         setLoggedIn(true);
+        navigation.setOptions({title: 'Home'});
       }
     });
   }, []);
+  const getRooms = () => {};
+  if (loggedIn === false) {
+    return <Login navigation={navigation} />;
+  }
   return (
     <View>
       {error.length > 0 && setTimeout(() => setError(''), 7000) && (
@@ -33,7 +40,6 @@ export default function Home({navigation}) {
         onPress={() =>
           auth()
             .signOut()
-            .then((res) => Alert.alert('Success', 'Logged out'))
             .catch((err) => setError(err.message))
         }>
         <Text> Logout </Text>
