@@ -18,10 +18,8 @@ export default function Home({navigation}) {
         // User not signed in.
         //navigation.navigate('Login')
         setLoggedIn(false);
-        navigation.setOptions({title: 'Login'});
       } else {
         setLoggedIn(true);
-        navigation.setOptions({title: 'Home'});
       }
     });
   }, []);
