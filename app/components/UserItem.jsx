@@ -31,6 +31,9 @@ export default function UserItem({user, userId, navigation}) {
       color: COLORS.grey,
       textAlign: 'right',
     },
+    userData: {
+      width: 170,
+    },
   });
   return (
     <Pressable
@@ -42,15 +45,14 @@ export default function UserItem({user, userId, navigation}) {
       <View style={styles.container}>
         <Image
           style={styles.avatar}
-          source={
-            user !== undefined
-              ? {
-                  uri: user.avatar,
-                }
-              : require('../assets/default_avatar_gif.gif')
-          }
+          source={{
+            uri:
+              user !== undefined
+                ? user.avatar
+                : 'https://images.unsplash.com/photo-1608232277615-1fe46b66ebcf?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=334&q=80',
+          }}
         />
-        <View>
+        <View style={styles.userData}>
           <Text style={styles.username}>
             {' '}
             {user !== undefined ? user.username : 'Username missing'}{' '}
