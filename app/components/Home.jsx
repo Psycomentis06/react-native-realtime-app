@@ -110,7 +110,7 @@ export default function Home({navigation}) {
         )}
       />
       {loading && <ActivityIndicator size="large" color={COLORS.primary} />}
-      <HomeButtonBar />
+      <HomeButtonBar navigation={navigation} />
     </View>
   );
 }

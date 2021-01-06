@@ -1,7 +1,8 @@
 import React from 'react';
-import {View, StyleSheet, Pressable, Text} from 'react-native';
+import {View, StyleSheet, Pressable, Text, Alert} from 'react-native';
 import {COLORS} from './__styleVars';
-export default function HomeButtonBar() {
+import auth from '@react-native-firebase/auth';
+export default function HomeButtonBar({navigation}) {
   const styles = StyleSheet.create({
     container: {
       display: 'flex',
@@ -20,10 +21,16 @@ export default function HomeButtonBar() {
   });
   return (
     <View style={styles.container}>
-      <Pressable>
+      <Pressable onPress={() => navigation.navigate('Profile')}>
         <Text> Profile </Text>
       </Pressable>
-      <Pressable>
+      <Pressable
+        onPress={() =>
+          auth()
+            .signOut()
+            .then(() => Alert.alert('Logout', 'Logged out successfuly'))
+            .catch((err) => Alert.alert('Error', err.message))
+        }>
         <Text> Logout </Text>
       </Pressable>
     </View>
