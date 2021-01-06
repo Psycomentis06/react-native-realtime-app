@@ -14,6 +14,7 @@ import {COLORS} from './__styleVars';
 import UserItem from './UserItem';
 import Login from './Login';
 import {TextInput} from 'react-native-gesture-handler';
+import HomeButtonBar from './HomeBottomBar';
 export default function Home({navigation}) {
   const styles = StyleSheet.create({
     container: {
@@ -109,6 +110,7 @@ export default function Home({navigation}) {
         )}
       />
       {loading && <ActivityIndicator size="large" color={COLORS.primary} />}
+      <HomeButtonBar />
     </View>
   );
 }
