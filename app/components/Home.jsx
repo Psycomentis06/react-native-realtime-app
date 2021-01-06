@@ -61,7 +61,7 @@ export default function Home({navigation}) {
   const [loading, setLoading] = useState(false); // fetch data indicator
   const [users, setUsers] = useState([]); // available users
   const [search, setSearch] = useState('');
-  useEffect(() => {
+  const currentUser = () => {
     auth().onAuthStateChanged(function (user) {
       if (!user) {
         // User not signed in.
@@ -71,6 +71,9 @@ export default function Home({navigation}) {
         getRooms();
       }
     });
+  };
+  useEffect(() => {
+    currentUser();
   }, []);
   const getRooms = () => {
     let usersArray = [];
