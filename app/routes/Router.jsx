@@ -4,6 +4,7 @@ import ChatRoom from '../components/ChatRoom';
 import Signup from '../components/Signup';
 import Home from '../components/Home';
 import Login from '../components/Login';
+import Profile from '../components/Profile';
 export default function Router() {
   const Stack = createStackNavigator();
   return (
@@ -16,6 +17,7 @@ export default function Router() {
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="Chat" component={ChatRoom} />
+      <Stack.Screen name="Profile" component={Profile} />
     </Stack.Navigator>
   );
 }
