@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, Image, Pressable, Alert} from 'react-native';
 import {COLORS} from './__styleVars';
+import auth from '@react-native-firebase/auth';
 export default function UserItem({user, userId, navigation}) {
+  const [currentUser, setCurrentUser] = useState({uid: ''});
   const styles = StyleSheet.create({
     container: {
-      backgroundColor: COLORS.primary,
+      backgroundColor: userId === currentUser.uid ? 'gold' : COLORS.primary,
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
@@ -21,20 +23,29 @@ export default function UserItem({user, userId, navigation}) {
       marginRight: 10,
     },
     username: {
-      color: COLORS.white,
+      color: userId === currentUser.uid ? COLORS.black : COLORS.white,
       fontSize: 18,
       fontWeight: 'bold',
       flexShrink: 1,
     },
     date: {
       fontSize: 12,
-      color: COLORS.grey,
+      color: userId === currentUser.uid ? COLORS.black : COLORS.grey,
+      opacity: userId === currentUser.uid ? 0.7 : 1,
       textAlign: 'right',
     },
     userData: {
       width: 170,
     },
   });
+  const getCurrentUser = () => {
+    auth().onAuthStateChanged((user) => {
+      if (user) {
+        setCurrentUser(user);
+      }
+    });
+  };
+  useEffect(() => getCurrentUser(), []);
   return (
     <Pressable
       onPress={() => {
@@ -58,14 +69,17 @@ export default function UserItem({user, userId, navigation}) {
         />
         <View style={styles.userData}>
           <Text style={styles.username}>
-            {' '}
-            {user !== undefined ? user.username : 'Username missing'}{' '}
+            {console.log(currentUser.uid)}
+            {user !== undefined
+              ? userId === currentUser.uid
+                ? 'You'
+                : user.username
+              : 'Username missing'}
           </Text>
           <Text style={styles.date}>
-            {' '}
             {user !== undefined
               ? new Date(user.createdAt).toLocaleString()
-              : 'not mentioned'}{' '}
+              : 'not mentioned'}
           </Text>
         </View>
       </View>
