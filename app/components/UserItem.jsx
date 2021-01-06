@@ -42,6 +42,7 @@ export default function UserItem({user, userId, navigation}) {
           ? navigation.navigate('Chat', {
               userId: userId,
               username: user.username,
+              avatar: user.avatar,
             })
           : Alert.alert('Error', 'User object is missing');
       }}>

@@ -1,11 +1,18 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {Text, View, StyleSheet, Pressable} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Pressable,
+  ImageBackground,
+  ActivityIndicator,
+} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import {COLORS} from './__styleVars';
 import {FlatList, TextInput} from 'react-native-gesture-handler';
 export default function ChatRoom({route, navigation}) {
-  const {userId, username} = route.params;
+  const {userId, username, avatar} = route.params;
   // states
   const [loggedIn, setLoggedIn] = useState(false);
   const [error, setError] = useState('');
@@ -14,6 +21,7 @@ export default function ChatRoom({route, navigation}) {
   const [user, setUser] = useState({});
   const [roomId, setRoomId] = useState('');
   const [newChat, setNewChat] = useState(false);
+  const [loadingPage, setLoadingPage] = useState(true);
   // style
   const styles = StyleSheet.create({
     notLoggedcontainer: {
@@ -30,9 +38,10 @@ export default function ChatRoom({route, navigation}) {
       color: COLORS.danger,
       fontFamily: 'sans-serif-condensed',
     },
-    container: {},
+    container: {
+      position: 'relative',
+    },
     chatContainer: {
-      backgroundColor: COLORS.grey,
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
@@ -67,7 +76,7 @@ export default function ChatRoom({route, navigation}) {
       color: COLORS.white,
     },
     conversation: {
-      height: !newChat ? '100%' : '80%',
+      height: '100%',
       padding: 5,
       display: 'flex',
       justifyContent: 'flex-end',
@@ -75,9 +84,10 @@ export default function ChatRoom({route, navigation}) {
     actionContainer: {
       display: 'flex',
       flexDirection: 'row',
-      borderTopColor: COLORS.black,
+      borderTopColor: COLORS.grey,
       borderTopWidth: 1,
       alignItems: 'center',
+      backgroundColor: COLORS.grey,
     },
     title: {
       fontSize: 25,
@@ -125,6 +135,7 @@ export default function ChatRoom({route, navigation}) {
         } else {
           setLoggedIn(false);
         }
+        setLoadingPage(false);
       });
     });
   }, [navigation]);
@@ -153,6 +164,13 @@ export default function ChatRoom({route, navigation}) {
       setError('Message empty');
     }
   };
+  if (loadingPage === true) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator color={COLORS.success} size="large" />
+      </View>
+    );
+  }
   if (loggedIn === false) {
     return (
       <View style={styles.notLoggedcontainer}>
@@ -165,6 +183,15 @@ export default function ChatRoom({route, navigation}) {
   }
   return (
     <View style={styles.container}>
+      <ImageBackground
+        source={{uri: avatar}}
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'absolute',
+        }}
+        blurRadius={5}
+      />
       <View style={styles.chatContainer}>
         {newChat && <Text style={styles.title}> Say hello to {username} </Text>}
         <FlatList
