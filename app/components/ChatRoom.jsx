@@ -140,7 +140,6 @@ export default function ChatRoom({route, navigation}) {
     });
   }, [navigation]);
   const addMessage = (message, type) => {
-    console.log(roomId);
     if (message.length > 0) {
       database()
         .ref('rooms')
