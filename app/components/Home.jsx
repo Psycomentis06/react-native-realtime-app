@@ -46,11 +46,21 @@ export default function Home({navigation}) {
       marginLeft: 'auto',
       marginRight: 'auto',
     },
+    noUsers: {
+      textAlign: 'center',
+      fontSize: 20,
+      color: COLORS.info,
+    },
+    noUsersSearchName: {
+      fontWeight: 'bold',
+      borderBottomColor: COLORS.black,
+    },
   });
   const [loggedIn, setLoggedIn] = useState(false); // user login state
   const [error, setError] = useState(''); // request errors
   const [loading, setLoading] = useState(false); // fetch data indicator
   const [users, setUsers] = useState([]); // available users
+  const [search, setSearch] = useState('');
   useEffect(() => {
     auth().onAuthStateChanged(function (user) {
       if (!user) {
@@ -79,6 +89,13 @@ export default function Home({navigation}) {
         setLoading(false);
       });
   };
+  const filterDataHandler = () => {
+    const filtred = users.filter((user) =>
+      user.user.username.includes(search.trim()),
+    );
+
+    return filtred;
+  };
   if (loggedIn === false) {
     return <Login navigation={navigation} />;
   }
@@ -92,14 +109,21 @@ export default function Home({navigation}) {
           style={styles.searchInput}
           placeholder="Search"
           placeholderTextColor={COLORS.black}
+          onChangeText={(text) => setSearch(text)}
         />
-        <Pressable style={styles.searchButton}>
+        <Pressable style={styles.searchButton} onPress={() => getRooms()}>
           <Icon name="information-circle-outline" color="black" size={20} />
         </Pressable>
       </View>
       <Text style={styles.title}> Users </Text>
+      {filterDataHandler().length === 0 && (
+        <Text style={styles.noUsers}>
+          No user found with username
+          <Text style={styles.noUsersSearchName}> {search} </Text>
+        </Text>
+      )}
       <FlatList
-        data={users}
+        data={filterDataHandler()}
         keyExtractor={(user) => user.id}
         renderItem={(user) => (
           <UserItem
