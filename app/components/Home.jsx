@@ -14,6 +14,7 @@ import {COLORS} from './__styleVars';
 import UserItem from './UserItem';
 import Login from './Login';
 import {TextInput} from 'react-native-gesture-handler';
+import Circle from 'react-native-progress/Circle';
 import HomeButtonBar from './HomeBottomBar';
 export default function Home({navigation}) {
   const styles = StyleSheet.create({
@@ -35,6 +36,10 @@ export default function Home({navigation}) {
     },
     searchButton: {
       backgroundColor: COLORS.primary,
+      width: '15%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     title: {
       textAlign: 'center',
@@ -61,6 +66,7 @@ export default function Home({navigation}) {
   const [loading, setLoading] = useState(false); // fetch data indicator
   const [users, setUsers] = useState([]); // available users
   const [search, setSearch] = useState('');
+  const [loadingPage, setLoadingPage] = useState(true);
   const currentUser = () => {
     auth().onAuthStateChanged(function (user) {
       if (!user) {
@@ -73,7 +79,7 @@ export default function Home({navigation}) {
     });
   };
   useEffect(() => {
-    currentUser();
+    return currentUser();
   }, []);
   const getRooms = () => {
     let usersArray = [];
@@ -90,6 +96,7 @@ export default function Home({navigation}) {
         });
         setUsers(usersArray);
         setLoading(false);
+        setLoadingPage(false);
       });
   };
   const filterDataHandler = () => {
@@ -102,6 +109,11 @@ export default function Home({navigation}) {
   if (loggedIn === false) {
     return <Login navigation={navigation} />;
   }
+
+  if (loadingPage) {
+    return <Circle width={200} indeterminate={true} />;
+  }
+
   return (
     <View style={styles.container}>
       {error.length > 0 && setTimeout(() => setError(''), 7000) && (
@@ -115,7 +127,7 @@ export default function Home({navigation}) {
           onChangeText={(text) => setSearch(text)}
         />
         <Pressable style={styles.searchButton} onPress={() => getRooms()}>
-          <Icon name="information-circle-outline" color="black" size={20} />
+          <Icon name="search-outline" color={COLORS.white} size={22} />
         </Pressable>
       </View>
       <Text style={styles.title}> Users </Text>
