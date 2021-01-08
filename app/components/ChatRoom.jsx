@@ -76,7 +76,6 @@ export default function ChatRoom({route, navigation}) {
       color: COLORS.white,
     },
     conversation: {
-      height: '100%',
       padding: 5,
       display: 'flex',
       justifyContent: 'flex-end',
@@ -194,6 +193,7 @@ export default function ChatRoom({route, navigation}) {
       <View style={styles.chatContainer}>
         {newChat && <Text style={styles.title}> Say hello to {username} </Text>}
         <FlatList
+          style={{height: '100%'}}
           contentContainerStyle={styles.conversation}
           data={chat}
           renderItem={(message) => (
