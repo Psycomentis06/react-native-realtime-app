@@ -11,6 +11,7 @@ import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import {COLORS} from './__styleVars';
 import {FlatList, TextInput} from 'react-native-gesture-handler';
+import ChatAction from './ChatActions';
 export default function ChatRoom({route, navigation}) {
   const {userId, username, avatar} = route.params;
   // states
@@ -231,19 +232,22 @@ export default function ChatRoom({route, navigation}) {
         {error.length > 0 && setTimeout(() => setError(''), 5000) && (
           <Text style={{color: COLORS.danger}}> {error} </Text>
         )}
-        <View style={styles.actionContainer}>
-          <TextInput
-            placeholderTextColor={COLORS.black}
-            placeholder="Send message"
-            style={styles.input}
-            value={message}
-            onChangeText={(text) => setMessage(text)}
-          />
-          <Pressable
-            style={styles.sendBtn}
-            onPress={() => addMessage(message, 'text')}>
-            <Text style={{color: COLORS.white}}> Send </Text>
-          </Pressable>
+        <View>
+          <ChatAction />
+          <View style={styles.actionContainer}>
+            <TextInput
+              placeholderTextColor={COLORS.black}
+              placeholder="Send message"
+              style={styles.input}
+              value={message}
+              onChangeText={(text) => setMessage(text)}
+            />
+            <Pressable
+              style={styles.sendBtn}
+              onPress={() => addMessage(message, 'text')}>
+              <Text style={{color: COLORS.white}}> Send </Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </View>
