@@ -9,10 +9,14 @@ export default function ChatAction() {
       display: 'flex',
       justifyContent: 'space-around',
       alignItems: 'center',
+      flexDirection: 'row',
+      paddingVertical: 10,
+      borderBottomColor: COLORS.primary,
+      borderBottomWidth: 1,
     },
   });
   return (
-    <View>
+    <View style={styles.container}>
       <Pressable>
         <Text> AddImage </Text>
       </Pressable>
