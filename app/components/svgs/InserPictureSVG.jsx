@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Svg, {Path} from 'react-native-svg';
 
-function InserPictureSVG() {
+export default function InserPictureSVG() {
   return (
     <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 298.73 298.73">
       <Path
@@ -11,5 +11,3 @@ function InserPictureSVG() {
     </Svg>
   );
 }
-
-export default SvgComponent;
