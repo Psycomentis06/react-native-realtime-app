@@ -69,7 +69,6 @@ export default function UserItem({user, userId, navigation}) {
         />
         <View style={styles.userData}>
           <Text style={styles.username}>
-            {console.log(currentUser.uid)}
             {user !== undefined
               ? userId === currentUser.uid
                 ? 'You'
