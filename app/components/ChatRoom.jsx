@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   Text,
   View,
@@ -22,6 +22,8 @@ export default function ChatRoom({route, navigation}) {
   const [roomId, setRoomId] = useState('');
   const [newChat, setNewChat] = useState(false);
   const [loadingPage, setLoadingPage] = useState(true);
+  // Ref
+  const flatlistRef = useRef();
   // style
   const styles = StyleSheet.create({
     notLoggedcontainer: {
@@ -97,46 +99,48 @@ export default function ChatRoom({route, navigation}) {
   });
   // validate if user logged in
   useEffect(() => {
-    navigation.addListener('focus', () => {
-      auth().onAuthStateChanged((loggedUser) => {
-        if (loggedUser) {
-          navigation.setOptions({title: username});
-          setUser(loggedUser);
-          var localRoomId = '';
-          if (loggedUser.uid > userId) {
-            setRoomId(loggedUser.uid + userId);
-            localRoomId = loggedUser.uid + userId;
+    const getData = () =>
+      navigation.addListener('focus', () => {
+        auth().onAuthStateChanged((loggedUser) => {
+          if (loggedUser) {
+            navigation.setOptions({title: username});
+            setUser(loggedUser);
+            var localRoomId = '';
+            if (loggedUser.uid > userId) {
+              setRoomId(loggedUser.uid + userId);
+              localRoomId = loggedUser.uid + userId;
+            } else {
+              setRoomId(userId + loggedUser.uid);
+              localRoomId = userId + loggedUser.uid;
+            }
+            setLoggedIn(true);
+            if (localRoomId.length > 0) {
+              database()
+                .ref('rooms')
+                .child(localRoomId)
+                .on('value', (snapshot) => {
+                  if (!snapshot.exists()) {
+                    setNewChat(true);
+                  } else {
+                    let chatArray = [];
+                    snapshot.forEach((message) => {
+                      const messageEl = {
+                        id: message.key,
+                        message: message.val(),
+                      };
+                      chatArray.push(messageEl);
+                    });
+                    setChat(chatArray);
+                  }
+                });
+            }
           } else {
-            setRoomId(userId + loggedUser.uid);
-            localRoomId = userId + loggedUser.uid;
+            setLoggedIn(false);
           }
-          setLoggedIn(true);
-          if (localRoomId.length > 0) {
-            database()
-              .ref('rooms')
-              .child(localRoomId)
-              .on('value', (snapshot) => {
-                if (!snapshot.exists()) {
-                  setNewChat(true);
-                } else {
-                  let chatArray = [];
-                  snapshot.forEach((message) => {
-                    const messageEl = {
-                      id: message.key,
-                      message: message.val(),
-                    };
-                    chatArray.push(messageEl);
-                  });
-                  setChat(chatArray);
-                }
-              });
-          }
-        } else {
-          setLoggedIn(false);
-        }
-        setLoadingPage(false);
+          setLoadingPage(false);
+        });
       });
-    });
+    return getData();
   }, [navigation]);
   const addMessage = (message, type) => {
     if (message.length > 0) {
@@ -155,6 +159,7 @@ export default function ChatRoom({route, navigation}) {
               setError(err.message);
             } else {
               setMessage('');
+              flatlistRef.current.scrollToEnd({animated: true});
             }
           },
         );
@@ -193,9 +198,13 @@ export default function ChatRoom({route, navigation}) {
       <View style={styles.chatContainer}>
         {newChat && <Text style={styles.title}> Say hello to {username} </Text>}
         <FlatList
+          ref={flatlistRef}
           style={{height: '100%'}}
           contentContainerStyle={styles.conversation}
           data={chat}
+          onContentSizeChange={() =>
+            flatlistRef.current.scrollToEnd({animated: true})
+          }
           renderItem={(message) => (
             <View
               style={
