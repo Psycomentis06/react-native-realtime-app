@@ -8,6 +8,9 @@ import InserPictureSVG from './svgs/InserPictureSVG';
 import PhotoCameraSVG from './svgs/PhotoCameraSVG';
 import * as Progress from 'react-native-progress';
 export default function ChatAction({user, roomId}) {
+  const [uploadImage, setUploadImage] = useState(0);
+  const [getImagePress, setGetImagePress] = useState(false);
+  const [takePicturePress, setTakePicturePress] = useState(false);
   const styles = StyleSheet.create({
     container: {
       width: '100%',
@@ -27,8 +30,17 @@ export default function ChatAction({user, roomId}) {
       marginLeft: 'auto',
       marginRight: 'auto',
     },
+    takePicture: {
+      padding: 10,
+      backgroundColor: takePicturePress ? COLORS.primary : 'transparent',
+      borderRadius: 10,
+    },
+    getImage: {
+      padding: 10,
+      backgroundColor: getImagePress ? COLORS.primary : 'transparent',
+      borderRadius: 10,
+    },
   });
-  const [uploadImage, setUploadImage] = useState(0);
   const sendMessage = (image) => {
     const imageExtention = image.path;
     const splittedPath = imageExtention.split('/');
@@ -81,11 +93,23 @@ export default function ChatAction({user, roomId}) {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Pressable onPress={() => getImage()}>
-          <InserPictureSVG />
+        <Pressable
+          style={styles.getImage}
+          onPress={() => {
+            getImage();
+            setGetImagePress(true);
+            setTimeout(() => setGetImagePress(false), 300);
+          }}>
+          <InserPictureSVG color={getImagePress ? COLORS.white : null} />
         </Pressable>
-        <Pressable onPress={() => takeImage()}>
-          <PhotoCameraSVG />
+        <Pressable
+          style={styles.takePicture}
+          onPress={() => {
+            takeImage();
+            setTakePicturePress(true);
+            setTimeout(() => setTakePicturePress(false), 300);
+          }}>
+          <PhotoCameraSVG color={takePicturePress ? COLORS.white : null} />
         </Pressable>
       </View>
       {uploadImage > 0 && (
