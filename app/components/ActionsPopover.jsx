@@ -1,21 +1,13 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {COLORS} from './__styleVars';
-/**
- * Create Action popover to delete message basically
- * @param {number} itemId Action to perform for that item
- * @param {string} roomId Room to get the item from
- * @param {boolean} isOpen True to set component visible default is false
- */
+
 export default function ActionPopover({itemId, roomId, isOpen}) {
   const styles = StyleSheet.create({
     container: {
       width: '100%',
       padding: 10,
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      backgroundColor: COLORS.black,
+      backgroundColor: COLORS.scondary,
       borderRadius: 15,
       shadowColor: COLORS.black,
       shadowOffset: {
@@ -25,17 +17,30 @@ export default function ActionPopover({itemId, roomId, isOpen}) {
       shadowOpacity: 0.22,
       shadowRadius: 2.22,
       elevation: 3,
-      display: isOpen || false ? 'flex' : 'none',
+      display: isOpen ? 'flex' : 'none',
+      flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
     },
+    text: {
+      color: COLORS.white,
+    },
+    wrapper: {
+      width: '100%',
+      position: 'absolute',
+      zIndex: 1,
+      top: 10,
+      left: 0,
+    },
   });
   return (
-    <View style={styles.container}>
-      <Text> Delete </Text>
-      <Text> Reply </Text>
-      <Text> Hide </Text>
-      <Text> Close </Text>
+    <View style={styles.wrapper}>
+      <View style={styles.container}>
+        <Text style={styles.text}> Delete </Text>
+        <Text style={styles.text}> Reply </Text>
+        <Text style={styles.text}> Hide </Text>
+        <Text style={styles.text}> Close </Text>
+      </View>
     </View>
   );
 }
