@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Image} from 'react-native';
+import {View, StyleSheet, Image, Text} from 'react-native';
 import {COLORS} from './__styleVars';
 export default function MineBubbleImage({message}) {
   const styles = StyleSheet.create({
