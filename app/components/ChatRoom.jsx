@@ -211,16 +211,15 @@ export default function ChatRoom({route, navigation}) {
             flatlistRef.current.scrollToEnd({animated: true})
           }
           renderItem={(message) => {
-            console.log(message.item.message.msgType);
             if (message.item.message.msgType === 'text') {
               if (message.item.message.sender === user.uid) {
-                return <MineBubbleText message={message} />;
+                return <MineBubbleText roomId={roomId} message={message} />;
               } else {
                 return <UserBubbleText message={message} />;
               }
             } else if (message.item.message.msgType === 'photo') {
               if (message.item.message.sender === user.uid) {
-                return <MineBubbleImage message={message} />;
+                return <MineBubbleImage roomId={roomId} message={message} />;
               } else {
                 return <UserBubbleImage message={message} />;
               }
