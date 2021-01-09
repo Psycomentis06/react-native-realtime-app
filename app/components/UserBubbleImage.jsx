@@ -15,8 +15,9 @@ export default function UserBubbleImage({message}) {
       marginLeft: 'auto',
     },
     image: {
-      width: '70%',
-      height: 350,
+      width: '100%',
+      height: 200,
+      resizeMode: 'cover',
     },
   });
   return (

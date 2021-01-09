@@ -14,8 +14,9 @@ export default function MineBubbleImage({message}) {
       color: COLORS.white,
     },
     image: {
-      width: '70%',
-      height: 350,
+      width: '100%',
+      height: 200,
+      resizeMode: 'cover',
     },
   });
   return (
