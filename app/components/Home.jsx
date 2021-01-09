@@ -7,7 +7,6 @@ import {
   Pressable,
   ActivityIndicator,
 } from 'react-native';
-import Icon from 'react-native-ionicons';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import {COLORS} from './__styleVars';
@@ -16,6 +15,7 @@ import Login from './Login';
 import {TextInput} from 'react-native-gesture-handler';
 import Circle from 'react-native-progress/Circle';
 import HomeButtonBar from './HomeBottomBar';
+import SearchSVG from './svgs/SearchSVG';
 export default function Home({navigation}) {
   const styles = StyleSheet.create({
     container: {
@@ -131,7 +131,7 @@ export default function Home({navigation}) {
           onChangeText={(text) => setSearch(text)}
         />
         <Pressable style={styles.searchButton} onPress={() => getRooms()}>
-          <Icon name="search-outline" color={COLORS.white} size={22} />
+          <SearchSVG color={COLORS.white} />
         </Pressable>
       </View>
       <Text style={styles.title}> Users </Text>
