@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, StyleSheet, Text, Pressable} from 'react-native';
 import {COLORS} from './__styleVars';
 import ActionPopover from './ActionsPopover';
-export default function MineBubbleText({message}) {
+export default function MineBubbleText({message, roomId}) {
   const styles = StyleSheet.create({
     bubbleMine: {
       width: '70%',
@@ -18,7 +18,7 @@ export default function MineBubbleText({message}) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-      <ActionPopover isOpen={isOpen} />
+      <ActionPopover itemId={message.item.id} roomId={roomId} isOpen={isOpen} />
       <Pressable onLongPress={() => setIsOpen(!isOpen)}>
         <View style={styles.bubbleMine}>
           <Text style={{flexShrink: 1, fontSize: 16, color: COLORS.white}}>

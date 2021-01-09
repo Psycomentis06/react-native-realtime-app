@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, StyleSheet, Image, Text, Pressable} from 'react-native';
 import {COLORS} from './__styleVars';
 import ActionPopover from './ActionsPopover';
-export default function MineBubbleImage({message}) {
+export default function MineBubbleImage({message, roomId}) {
   const styles = StyleSheet.create({
     bubbleMine: {
       width: '70%',
@@ -24,7 +24,7 @@ export default function MineBubbleImage({message}) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-      <ActionPopover isOpen={isOpen} />
+      <ActionPopover roomId={roomId} itemId={message.item.id} isOpen={isOpen} />
       <Pressable onLongPress={() => setIsOpen(!isOpen)}>
         <View style={styles.bubbleMine}>
           <View style={{elevation: 5}}>
