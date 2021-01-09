@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Svg, {Path} from 'react-native-svg';
 
-export default function SearchSVG({width, height, style}) {
+export default function SearchSVG({width, height, style, color}) {
   return (
     <Svg
       width={width || '30'}
