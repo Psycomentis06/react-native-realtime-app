@@ -18,6 +18,7 @@ export default function UserBubbleImage({message}) {
       width: '100%',
       height: 200,
       resizeMode: 'cover',
+      borderRadius: 15,
     },
   });
   return (

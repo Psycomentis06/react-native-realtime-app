@@ -18,6 +18,7 @@ export default function MineBubbleImage({message}) {
       width: '100%',
       height: 200,
       resizeMode: 'cover',
+      borderRadius: 15,
     },
   });
   const [isOpen, setIsOpen] = useState(false);
@@ -26,10 +27,12 @@ export default function MineBubbleImage({message}) {
       <ActionPopover isOpen={isOpen} />
       <Pressable onLongPress={() => setIsOpen(!isOpen)}>
         <View style={styles.bubbleMine}>
-          <Image
-            source={{uri: message.item.message.message}}
-            style={styles.image}
-          />
+          <View style={{elevation: 5}}>
+            <Image
+              source={{uri: message.item.message.message}}
+              style={styles.image}
+            />
+          </View>
           <Text
             style={{
               fontSize: 10,
