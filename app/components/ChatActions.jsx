@@ -45,10 +45,16 @@ export default function ChatAction({user, roomId}) {
     const imageExtention = image.path;
     const splittedPath = imageExtention.split('/');
     const fileName = splittedPath[splittedPath.length - 1];
-    //const fileExtention = fileName.split('.')[1];
+    const fileExtention = fileName.split('.')[1];
     const imageRef = storage()
       .ref('images')
-      .child(fileName + Math.floor(Math.random()) * 10000);
+      .child(
+        Math.round(Math.pow(36, 30) - Math.random() * Math.pow(36, 30))
+          .toString(36)
+          .slice(1) +
+          '.' +
+          fileExtention,
+      );
     const imagePut = imageRef.putFile(image.path);
     imagePut.on('state_changed', (response) => {
       setUploadImage(response.bytesTransferred / response.totalBytes); // progress bar
