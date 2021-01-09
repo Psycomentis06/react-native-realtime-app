@@ -111,7 +111,11 @@ export default function Home({navigation}) {
   }
 
   if (loadingPage) {
-    return <Circle width={200} indeterminate={true} />;
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Circle width={400} indeterminate={true} />
+      </View>
+    );
   }
 
   return (
