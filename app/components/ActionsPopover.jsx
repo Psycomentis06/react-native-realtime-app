@@ -29,7 +29,7 @@ export default function ActionPopover({itemId, roomId, isOpen}) {
       width: '100%',
       position: 'absolute',
       zIndex: 1,
-      top: 10,
+      bottom: 0,
       left: 0,
     },
   });
