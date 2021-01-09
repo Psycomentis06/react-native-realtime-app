@@ -6,6 +6,7 @@ export default function UserProfileSVG({width, height, style, color}) {
     <Svg
       width={width || '30'}
       height={height || '30'}
+      style={style}
       viewBox="-42 0 512 512.002"
       xmlns="http://www.w3.org/2000/svg">
       <Path
