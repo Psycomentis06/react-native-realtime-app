@@ -1,6 +1,8 @@
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, Alert} from 'react-native';
 import {COLORS} from './__styleVars';
+import storage from '@react-native-firebase/storage';
+import database from '@react-native-firebase/database';
 
 export default function ActionPopover({itemId, roomId, isOpen}) {
   const styles = StyleSheet.create({
@@ -25,6 +27,10 @@ export default function ActionPopover({itemId, roomId, isOpen}) {
     text: {
       color: COLORS.white,
     },
+    soon: {
+      color: COLORS.white,
+      opacity: 0.5,
+    },
     wrapper: {
       width: '100%',
       position: 'absolute',
@@ -33,13 +39,69 @@ export default function ActionPopover({itemId, roomId, isOpen}) {
       left: 0,
     },
   });
+  const removeMessage = () => {
+    const itemRef = database()
+      .ref('rooms')
+      .child(roomId + '/' + itemId);
+    // check if it's an image
+    itemRef.once('value', (snapshot) => {
+      if (snapshot.exists()) {
+        const msgType = snapshot.val().msgType;
+        if (msgType === 'text') {
+          // delete node and nothing else
+          itemRef.remove();
+        } else if (msgType === 'photo') {
+          // delete node + delte photo from firebase Bucket
+          storage()
+            .ref('images')
+            .child(snapshot.val().fileName)
+            .delete()
+            .then((response) => {
+              // after file deleted from bucket delete firebase node
+              itemRef.remove();
+              console.log('image deleted');
+            })
+            .catch((err) => Alert.alert('Error', err.message));
+        }
+      }
+    });
+  };
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
-        <Text style={styles.text}> Delete </Text>
-        <Text style={styles.text}> Reply </Text>
-        <Text style={styles.text}> Hide </Text>
-        <Text style={styles.text}> Close </Text>
+        <Text style={styles.text} onPress={() => removeMessage()}>
+          Delete
+        </Text>
+        <Text
+          style={styles.soon}
+          onPress={() =>
+            Alert.alert(
+              'Soon',
+              'This feature will be available soon in future versions',
+            )
+          }>
+          Reply
+        </Text>
+        <Text
+          style={styles.soon}
+          onPress={() =>
+            Alert.alert(
+              'Soon',
+              'This feature will be available soon in future versions',
+            )
+          }>
+          Hide
+        </Text>
+        <Text
+          style={styles.soon}
+          onPress={() =>
+            Alert.alert(
+              'Soon',
+              'This feature will be available soon in future versions',
+            )
+          }>
+          Close
+        </Text>
       </View>
     </View>
   );
