@@ -60,9 +60,7 @@ export default function HomeButtonBar({navigation}) {
       </Pressable>
       <Pressable
         style={styles.buttons}
-        onPress={() =>
-          Alert.alert('Soon', 'About page in the app comming soon')
-        }>
+        onPress={() => navigation.navigate('About')}>
         <AboutSVG color={COLORS.white} />
       </Pressable>
     </View>
