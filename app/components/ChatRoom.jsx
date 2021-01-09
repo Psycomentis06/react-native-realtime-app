@@ -12,6 +12,10 @@ import database from '@react-native-firebase/database';
 import {COLORS} from './__styleVars';
 import {FlatList, TextInput} from 'react-native-gesture-handler';
 import ChatAction from './ChatActions';
+import MineBubbleText from './MineBubbleText';
+import UserBubbleText from './UserBubbleText';
+import MineBubbleImage from './MineBubbleImage';
+import UserBubbleImage from './UserBubbleImage';
 export default function ChatRoom({route, navigation}) {
   const {userId, username, avatar} = route.params;
   // states
@@ -206,27 +210,22 @@ export default function ChatRoom({route, navigation}) {
           onContentSizeChange={() =>
             flatlistRef.current.scrollToEnd({animated: true})
           }
-          renderItem={(message) => (
-            <View
-              style={
-                message.item.message.sender === user.uid
-                  ? styles.bubbleMine
-                  : styles.bubble
-              }>
-              <Text style={{flexShrink: 1, fontSize: 16, color: COLORS.white}}>
-                {message.item.message.message}
-              </Text>
-              <Text
-                style={{
-                  fontSize: 10,
-                  textAlign: 'center',
-                  color: COLORS.white,
-                  opacity: 0.7,
-                }}>
-                {new Date(message.item.message.createdAt).toLocaleString()}
-              </Text>
-            </View>
-          )}
+          renderItem={(message) => {
+            console.log(message.item.message.msgType);
+            if (message.item.message.msgType === 'text') {
+              if (message.item.message.sender === user.uid) {
+                return <MineBubbleText message={message} />;
+              } else {
+                return <UserBubbleText message={message} />;
+              }
+            } else if (message.item.message.msgType === 'photo') {
+              if (message.item.message.sender === user.uid) {
+                return <MineBubbleImage message={message} />;
+              } else {
+                return <UserBubbleImage message={message} />;
+              }
+            }
+          }}
           keyExtractor={(message) => message.id}
         />
         {error.length > 0 && setTimeout(() => setError(''), 5000) && (
