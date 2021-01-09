@@ -39,11 +39,10 @@ export default function ChatAction({user, roomId}) {
       .child(fileName + Math.floor(Math.random()) * 10000);
     const imagePut = imageRef.putFile(image.path);
     imagePut.on('state_changed', (response) => {
-      setUploadImage(
-        Math.round(response.bytesTransferred / response.totalBytes),
-      ); // progress bar
+      setUploadImage(response.bytesTransferred / response.totalBytes); // progress bar
     });
     imagePut.then((response) => {
+      setTimeout(() => setUploadImage(0), 2000); // reset progress bar after 2000 ms
       if (response.state === 'success') {
         // now we send the message
         imagePut.snapshot.ref.getDownloadURL().then((url) =>
