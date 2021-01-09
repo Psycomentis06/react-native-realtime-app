@@ -233,7 +233,7 @@ export default function ChatRoom({route, navigation}) {
           <Text style={{color: COLORS.danger}}> {error} </Text>
         )}
         <View>
-          <ChatAction />
+          <ChatAction roomId={roomId} user={user} />
           <View style={styles.actionContainer}>
             <TextInput
               placeholderTextColor={COLORS.black}
