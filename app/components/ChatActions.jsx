@@ -32,12 +32,12 @@ export default function ChatAction({user, roomId}) {
     },
     takePicture: {
       padding: 10,
-      backgroundColor: takePicturePress ? COLORS.primary : 'transparent',
+      backgroundColor: !takePicturePress ? COLORS.primary : COLORS.danger,
       borderRadius: 10,
     },
     getImage: {
       padding: 10,
-      backgroundColor: getImagePress ? COLORS.primary : 'transparent',
+      backgroundColor: !getImagePress ? COLORS.primary : COLORS.danger,
       borderRadius: 10,
     },
   });
@@ -100,7 +100,7 @@ export default function ChatAction({user, roomId}) {
             setGetImagePress(true);
             setTimeout(() => setGetImagePress(false), 300);
           }}>
-          <InserPictureSVG color={getImagePress ? COLORS.white : null} />
+          <InserPictureSVG color={COLORS.white} />
         </Pressable>
         <Pressable
           style={styles.takePicture}
@@ -109,7 +109,7 @@ export default function ChatAction({user, roomId}) {
             setTakePicturePress(true);
             setTimeout(() => setTakePicturePress(false), 300);
           }}>
-          <PhotoCameraSVG color={takePicturePress ? COLORS.white : null} />
+          <PhotoCameraSVG color={COLORS.white} />
         </Pressable>
       </View>
       {uploadImage > 0 && (
