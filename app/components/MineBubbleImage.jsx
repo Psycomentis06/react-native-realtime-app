@@ -1,6 +1,7 @@
-import React from 'react';
-import {View, StyleSheet, Image, Text} from 'react-native';
+import React, {useState} from 'react';
+import {View, StyleSheet, Image, Text, Pressable} from 'react-native';
 import {COLORS} from './__styleVars';
+import ActionPopover from './ActionsPopover';
 export default function MineBubbleImage({message}) {
   const styles = StyleSheet.create({
     bubbleMine: {
@@ -19,21 +20,27 @@ export default function MineBubbleImage({message}) {
       resizeMode: 'cover',
     },
   });
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <View style={styles.bubbleMine}>
-      <Image
-        source={{uri: message.item.message.message}}
-        style={styles.image}
-      />
-      <Text
-        style={{
-          fontSize: 10,
-          textAlign: 'center',
-          color: COLORS.white,
-          opacity: 0.7,
-        }}>
-        {new Date(message.item.message.createdAt).toLocaleString()}
-      </Text>
-    </View>
+    <>
+      <ActionPopover isOpen={isOpen} />
+      <Pressable onLongPress={() => setIsOpen(!isOpen)}>
+        <View style={styles.bubbleMine}>
+          <Image
+            source={{uri: message.item.message.message}}
+            style={styles.image}
+          />
+          <Text
+            style={{
+              fontSize: 10,
+              textAlign: 'center',
+              color: COLORS.white,
+              opacity: 0.7,
+            }}>
+            {new Date(message.item.message.createdAt).toLocaleString()}
+          </Text>
+        </View>
+      </Pressable>
+    </>
   );
 }
