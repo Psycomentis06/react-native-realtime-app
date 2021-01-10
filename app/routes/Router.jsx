@@ -6,6 +6,7 @@ import Home from '../components/Home';
 import Login from '../components/Login';
 import Profile from '../components/Profile';
 import About from '../components/About';
+import Bug from '../components/Bug';
 export default function Router() {
   const Stack = createStackNavigator();
   return (
@@ -20,6 +21,7 @@ export default function Router() {
       <Stack.Screen name="Chat" component={ChatRoom} />
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="About" component={About} />
+      <Stack.Screen name="Report" component={Bug} />
     </Stack.Navigator>
   );
 }

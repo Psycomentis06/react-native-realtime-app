@@ -53,9 +53,7 @@ export default function HomeButtonBar({navigation}) {
       </Pressable>
       <Pressable
         style={styles.buttons}
-        onPress={() =>
-          Alert.alert('Soon', 'Report bugs in the app comming soon')
-        }>
+        onPress={() => navigation.navigate('Report')}>
         <BugSVG color={COLORS.white} />
       </Pressable>
       <Pressable
