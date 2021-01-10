@@ -234,9 +234,10 @@ export default function ChatRoom({route, navigation}) {
           <ChatAction roomId={roomId} user={user} />
           <View style={styles.actionContainer}>
             <TextInput
+              multiline={true}
+              style={styles.input}
               placeholderTextColor={COLORS.black}
               placeholder="Send message"
-              style={styles.input}
               value={message}
               onChangeText={(text) => setMessage(text)}
             />
