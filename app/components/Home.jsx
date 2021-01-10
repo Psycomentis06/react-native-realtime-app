@@ -95,6 +95,7 @@ export default function Home({navigation}) {
           usersArray.push(userEl);
         });
         setUsers(usersArray);
+        usersArray = [];
         setLoading(false);
         setLoadingPage(false);
       });

@@ -49,14 +49,14 @@ export default function Profile({navigation}) {
   const deleteUser = () => {
     if (user) {
       auth().onAuthStateChanged((user) =>
-        user
-          .delete()
+        database()
+          .ref('users')
+          .child(user.uid)
+          .remove()
           .then(() =>
-            database()
-              .ref('users')
-              .child(user.uid)
-              .remove()
-              .then(() => navigation.goBack())
+            user
+              .delete()
+              .then(() => navigation.navigate('Home'))
               .catch((err) => setError(err.message)),
           )
           .catch((err) => setError(err.message)),

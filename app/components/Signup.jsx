@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Pressable,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
@@ -106,7 +107,12 @@ export default function Signup({navigation}) {
             email: user.user.email,
             avatar: AVATARS[Math.floor(Math.random() * AVATARS.length)],
           })
-          .then((snapshot) => navigation.navigate('Home'))
+          .then(() =>
+            Alert.alert(
+              'Created',
+              'Your account has been created you can go back to home page now',
+            ),
+          )
           .catch((err) => setError(err.message));
       })
       .catch((err) => setError(err.message))
