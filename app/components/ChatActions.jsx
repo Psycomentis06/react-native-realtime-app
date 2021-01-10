@@ -105,7 +105,7 @@ export default function ChatAction({user, roomId}) {
             setGetImagePress(true);
             setTimeout(() => setGetImagePress(false), 300);
           }}>
-          <InserPictureSVG color={COLORS.white} />
+          <InserPictureSVG width="20" height="20" color={COLORS.white} />
         </Pressable>
         <Pressable
           style={styles.takePicture}
@@ -114,7 +114,7 @@ export default function ChatAction({user, roomId}) {
             setTakePicturePress(true);
             setTimeout(() => setTakePicturePress(false), 300);
           }}>
-          <PhotoCameraSVG color={COLORS.white} />
+          <PhotoCameraSVG width="20" height="20" color={COLORS.white} />
         </Pressable>
       </View>
       {uploadImage > 0 && (
