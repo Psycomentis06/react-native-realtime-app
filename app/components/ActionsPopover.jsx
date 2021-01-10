@@ -3,8 +3,8 @@ import {View, StyleSheet, Text, Alert} from 'react-native';
 import {COLORS} from './__styleVars';
 import storage from '@react-native-firebase/storage';
 import database from '@react-native-firebase/database';
-
-export default function ActionPopover({itemId, roomId, isOpen}) {
+import Clipboard from '@react-native-community/clipboard';
+export default function ActionPopover({itemId, roomId, message, isOpen}) {
   const styles = StyleSheet.create({
     container: {
       width: '100%',
@@ -73,14 +73,9 @@ export default function ActionPopover({itemId, roomId, isOpen}) {
           Delete
         </Text>
         <Text
-          style={styles.soon}
-          onPress={() =>
-            Alert.alert(
-              'Soon',
-              'This feature will be available soon in future versions',
-            )
-          }>
-          Reply
+          style={styles.text}
+          onPress={() => (message ? Clipboard.getString(message) : null)}>
+          Copy
         </Text>
         <Text
           style={styles.soon}

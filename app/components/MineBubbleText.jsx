@@ -18,7 +18,12 @@ export default function MineBubbleText({message, roomId}) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-      <ActionPopover itemId={message.item.id} roomId={roomId} isOpen={isOpen} />
+      <ActionPopover
+        message={message.item.message.message}
+        itemId={message.item.id}
+        roomId={roomId}
+        isOpen={isOpen}
+      />
       <Pressable onLongPress={() => setIsOpen(!isOpen)}>
         <View style={styles.bubbleMine}>
           <Text style={{flexShrink: 1, fontSize: 16, color: COLORS.white}}>
